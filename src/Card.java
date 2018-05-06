@@ -7,7 +7,7 @@ public class Card
         suit = s;
         number = n;
     }
-    public int getSuit()
+    public char getSuit()
     {
         return suit;
     }
