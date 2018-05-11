@@ -60,7 +60,7 @@ public class Hand{
                 totalh++;
             else if(type.get(i) == 'd')
                 totald++;
-            if(totals == 5 || totalc == 5 || totalh == 5 || totald == 5)
+            if(totals >= 5 || totalc >= 5 || totalh >= 5 || totald >= 5)
                 return true;
         }
         return false;

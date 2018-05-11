@@ -20,7 +20,7 @@ public class Main extends Applet implements MouseListener
     Flop flop = new Flop();
     Image dbImage; //image variable for double buffer
     Graphics dbg;//double buffer
-    Image table, background, cardBack, checkButton, foldButton, betButton, callButton, triangle, line, dealer, big, little, chip;
+    Image table, background, cardBack, checkButton, foldButton, betButton, callButton, triangle, line, dealer, big, little, chip, cardTitle;
     Hand hand = new Hand();
     Hand hand2 = new Hand();
     Hand hand3 = new Hand();
@@ -32,6 +32,11 @@ public class Main extends Applet implements MouseListener
     private int playerTurn = 0;
     private String winner = "";
     private int[] price = {0, 5, 10, 0};
+    int dealerLocX = 600, dealerLocY = 550;
+    int littleLocX = 300, littleLocY = 400;
+    int bigLocX = 580, bigLocY = 200;
+    int emptyX = 1250, emptyY = 350;
+    private boolean title = true;
     //Image cards, cards1;
 
     //initiation method
@@ -51,6 +56,7 @@ public class Main extends Applet implements MouseListener
         big = getImage(this.getClass().getResource("big.png"));
         little = getImage(this.getClass().getResource("little.png"));
         chip = getImage(this.getClass().getResource("chip.png"));
+        cardTitle = getImage(this.getClass().getResource("title.png"));
         Font font = new Font("TimesRomann", Font.BOLD, 26);
         setFont(font);
         addMouseListener(this);//starting mouse listener
@@ -63,65 +69,67 @@ public class Main extends Applet implements MouseListener
     {
         //must redo later
         g.drawImage(background,0,0,this);
-        g.drawImage(table, 0, 0, this);
-        g.drawImage(dealer, 600, 550, this);
-        g.drawImage(little, 300, 400, this);
-        g.drawImage(chip, 1400, 500, this);
-        g.drawString("$" + price[3], 1400, 500);
-        g.drawImage(chip, 200, 500, this);
-        g.drawString("$" + price[1], 200, 500);
-        g.drawImage(chip, 900, 600, this);
-        g.drawString("$" + price[0], 900, 600);
-        g.drawImage(chip, 900, 150, this);
-        g.drawString("$" + price[2], 900, 150);
-        g.drawImage(big, 580, 200, this);
-        if(turn) {
-            g.drawImage(betButton, 1230, 700, this);
-            if (!bet) {
-                g.drawImage(checkButton, 430, 700, this);
-                g.drawImage(foldButton, 830, 700, this);
-                g.drawImage(callButton, 30, 700, this);
+        if(!title) {
+            g.drawImage(table, 0, 0, this);
+            g.drawImage(dealer, dealerLocX, dealerLocY, this);
+            g.drawImage(little, littleLocX, littleLocY, this);
+            g.drawImage(chip, 1400, 500, this);
+            g.drawString("$" + price[3], 1400, 500);
+            g.drawImage(chip, 200, 500, this);
+            g.drawString("$" + price[1], 200, 500);
+            g.drawImage(chip, 900, 600, this);
+            g.drawString("$" + price[0], 900, 600);
+            g.drawImage(chip, 900, 150, this);
+            g.drawString("$" + price[2], 900, 150);
+            g.drawImage(big, bigLocX, bigLocY, this);
+            if (turn) {
+                g.drawImage(betButton, 1230, 700, this);
+                if (!bet) {
+                    g.drawImage(checkButton, 430, 700, this);
+                    g.drawImage(foldButton, 830, 700, this);
+                    g.drawImage(callButton, 30, 700, this);
+                } else {
+                    g.drawImage(triangle, betX, 760, this);
+                    g.drawImage(line, 500, 760, this);
+                    g.drawString("$" + (betX - 520), betX, 795);
+                }
+            }
+            if(!fold) {
+                g.drawImage(drawCards.get(0), 700, 550, this);
+                g.drawImage(drawCards.get(1), 750, 550, this);
+            }
+            g.drawImage(cardBack, 1000, 310, this);
+            if (reveal) {
+                g.drawImage(drawCards.get(2), 1350, 325, this);
+                g.drawImage(drawCards.get(3), 1400, 325, this);
+                g.drawImage(drawCards.get(4), 150, 325, this);
+                g.drawImage(drawCards.get(5), 200, 325, this);
+                g.drawImage(drawCards.get(6), 700, 110, this);
+                g.drawImage(drawCards.get(7), 750, 110, this);
+                g.drawString(printWinner(), 500, 500);
             } else {
-                g.drawImage(triangle, betX, 760, this);
-                g.drawImage(line, 500, 760, this);
-                g.drawString("$"+(betX-520), betX, 795);
+                g.drawImage(cardBack, 1350, 325, this);
+                g.drawImage(cardBack, 1400, 325, this);
+                g.drawImage(cardBack, 150, 325, this);
+                g.drawImage(cardBack, 200, 325, this);
+                g.drawImage(cardBack, 700, 110, this);
+                g.drawImage(cardBack, 750, 110, this);
+            }
+            if (flip) {
+                g.drawImage(drawCards.get(8), 890, 310, this);
+                g.drawImage(drawCards.get(9), 790, 310, this);
+                g.drawImage(drawCards.get(10), 690, 310, this);
+            }
+            if (flip2) {
+                g.drawImage(drawCards.get(11), 590, 310, this);
+            }
+            if (flip3) {
+                g.drawImage(drawCards.get(12), 490, 310, this);
             }
         }
-        g.drawImage(drawCards.get(0), 700, 550, this);
-        g.drawImage(drawCards.get(1), 750, 550, this);
-        g.drawImage(cardBack, 1000, 310, this);
-        if(reveal)
+        else
         {
-            g.drawImage(drawCards.get(2), 1350, 325, this);
-            g.drawImage(drawCards.get(3), 1400, 325, this);
-            g.drawImage(drawCards.get(4), 150, 325, this);
-            g.drawImage(drawCards.get(5), 200, 325, this);
-            g.drawImage(drawCards.get(6), 700, 110, this);
-            g.drawImage(drawCards.get(7), 750, 110, this);
-            g.drawString(printWinner(), 500, 500);
-            System.out.println(hand);
-            System.out.println(hand2);
-            System.out.println(hand3);
-            System.out.println(hand4);
-        }
-        else {
-            g.drawImage(cardBack, 1350, 325, this);
-            g.drawImage(cardBack, 1400, 325, this);
-            g.drawImage(cardBack, 150, 325, this);
-            g.drawImage(cardBack, 200, 325, this);
-            g.drawImage(cardBack, 700, 110, this);
-            g.drawImage(cardBack, 750, 110, this);
-        }
-        if(flip) {
-            g.drawImage(drawCards.get(8), 890, 310, this);
-            g.drawImage(drawCards.get(9), 790, 310, this);
-            g.drawImage(drawCards.get(10), 690, 310, this);
-        }
-        if(flip2) {
-            g.drawImage(drawCards.get(11), 590, 310, this);
-        }
-        if(flip3) {
-            g.drawImage(drawCards.get(12), 490, 310, this);
+            g.drawImage(cardTitle, 400,100,this);
         }
     }
 
@@ -138,6 +146,8 @@ public class Main extends Applet implements MouseListener
 
         x = e.getX();
         y = e.getY();
+        if(title)
+            title = false;
         if(x>520&&x<1060&&bet)
             betX = x-50;
         if(x < 1551 && x > 1244 && y < 800 && y > 720 && !bet)
@@ -149,13 +159,25 @@ public class Main extends Applet implements MouseListener
             newBet = betX-520;
             roundOver = true;
         }
+        else if(x < 1150 && x > 800 && y < 800 && y > 720 && !bet)
+        {
+            fold = true;
+            reveal = true;
+        }
+        else if(x < 750 && x > 445 && y < 800 && y > 720)
+        {
+            check = true;
+        }
+        else if(x < 350 && x > 40 && y < 800 && y > 720)
+        {
+            call = true;
+        }
         round1();
         round2();
         round3();
         round4();
         System.out.println(x + " " + y);
         repaint();
-        //flipCount++;
     }
 
     public void mouseEntered(MouseEvent e)
@@ -302,6 +324,16 @@ public class Main extends Applet implements MouseListener
         if(roundOver && flipCount == 3)
         {
             reveal = true;
+            int tempX = dealerLocX;
+            int tempY = dealerLocY;
+            dealerLocX = littleLocX;
+            dealerLocY = littleLocY;
+            littleLocX = bigLocX;
+            littleLocY = bigLocY;
+            bigLocX = emptyX;
+            bigLocY = emptyY;
+            emptyX = tempX;
+            emptyY = tempY;
         }
         if (!round4)
             if (turn) {
