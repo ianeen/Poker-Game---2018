@@ -1,16 +1,21 @@
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+//Deck class
 public class Deck {
-    private ArrayList<Card> deck = new ArrayList<>();
+    private ArrayList<Card> deck = new ArrayList<>();//ArrayList of cards to make a deck
     public Deck()
     {
         genDeck();
     }
+    //Shuffles the cards
     public void shuffle()
     {
         Collections.shuffle(deck);
     }
+    //Generates the deck with all the different cards
     public void genDeck()
     {
         for(int i = 1; i <= 13; i++)

@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 import java.util.Collections;
-
+//Flop class
 public class Flop {
     private ArrayList<Card> flop = new ArrayList<>();
-    public Flop()
+    public Flop()//constructor
     {
 
     }
-
+    //adds the the first flop
     public void genFlop3(ArrayList<Card> deck)
     {
         for(int i = 0 ; i < 4; i++) {
@@ -16,11 +16,13 @@ public class Flop {
         }
 
     }
+    //adds the other 2 flops
     public void genFlopAfter(ArrayList<Card> deck)
     {
         flop.add(deck.get(0));
         deck.remove(0);
     }
+    //accessor and mutator methods
     public Card getCard1()
     {
         return flop.get(0);
@@ -28,7 +30,8 @@ public class Flop {
     public Card getCard2()
     {
         return flop.get(1);
-    }public Card getCard3()
+    }
+    public Card getCard3()
     {
         return flop.get(2);
     }
